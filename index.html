@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FMC Haulage - Load Checker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 40px;
+        }
+        input, button {
+            padding: 10px;
+            font-size: 16px;
+            margin: 10px;
+        }
+        .results {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>FMC Haulage - Load Checker</h1>
+    <p>Enter your Trailer Number below to view last 3 loads:</p>
+    <input type="text" id="trailerInput" placeholder="Enter Trailer Number">
+    <button onclick="searchLoads()">Search</button>
+
+    <div class="results" id="results"></div>
+
+    <script>
+        async function searchLoads() {
+            const rawInput = document.getElementById('trailerInput').value.trim().toUpperCase();
+            const trailer = rawInput.replace(/\s+/g, '').replace(/^FMC/, '');
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = 'Searching...';
+
+            if (!trailer) {
+                resultsDiv.innerHTML = 'Please enter a trailer number.';
+                return;
+            }
+
+            const sheetId = '1UF0ElphUQaBrxpmnP4Urrudf26VqVp4HF0UyjJjCNhE';
+            const apiKey = 'AIzaSyCEUSt7v7iNP3fbYUzCuwN2RVp0cQTOQ5o';
+            const range = 'Sheet1!A:K'; // Adjusted to match your real sheet range
+
+            try {
+                const response = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`);
+                const data = await response.json();
+                let rows = data.values;
+
+                if (!rows || rows.length <= 1) {
+                    resultsDiv.innerHTML = 'No data found. Please check with the office.';
+                    return;
+                }
+
+                rows = rows.slice(1); // Skip header row
+
+                const matchingRows = rows.filter(row => {
+                    if (!row[1]) return false; // Skip rows without trailer numbers
+                    const trailerFromSheet = row[1].toUpperCase().replace(/\s+/g, '').replace(/^FMC/, '');
+                    return trailerFromSheet === trailer;
+                });
+
+                if (matchingRows.length === 0) {
+                    resultsDiv.innerHTML = `No recent load records found for trailer ${rawInput}.`;
+                    return;
+                }
+
+                matchingRows.sort((a, b) => new Date(b[0]) - new Date(a[0])); // Sort by Timestamp
+
+                let output = `<strong>Last 3 loads for ${rawInput}:</strong><br><ul>`;
+                matchingRows.slice(0, 3).forEach(row => {
+                    const load = row[2] ? row[2] : 'Unknown Load'; // Load from COMMODITY (Column C)
+                    const date = row[0] ? row[0] : 'Unknown Date';  // Timestamp from Column A
+                    output += `<li>${load} – ${date}</li>`;
+                });
+                output += '</ul>';
+
+                resultsDiv.innerHTML = output;
+
+            } catch (error) {
+                console.error('Error fetching data', error);
+                resultsDiv.innerHTML = 'Error fetching data. Please try again later.';
+            }
+        }
+    </script>
+</body>
+</html>
