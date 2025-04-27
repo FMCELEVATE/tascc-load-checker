@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FMC Haulage TASCC Portal</title>
+    <style>
+        :root {
+            --primary-color: #0094e9;
+            --secondary-color: #e6f1fc;
+            --text-color: #fff;
+            --background-color: #121212;
+            --input-border-color: #4c4c4c;
+            --button-hover-color: #007bb5;
+            --form-background-color: #1f1f1f;
+        }
+
+        @media (prefers-color-scheme: light) {
+            :root {
+                --primary-color: #0094e9;
+                --text-color: #000;
+                --background-color: #fff;
+                --input-border-color: #ddd;
+                --button-hover-color: #007bb5;
+                --form-background-color: #f7f7f7;
+            }
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            padding: 40px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        #logo {
+            width: 150px;
+            margin-bottom: 20px;
+            transition: transform 0.5s ease;
+        }
+
+        .form-container {
+            background-color: var(--form-background-color);
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 500px;
+            margin: auto;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid var(--input-border-color);
+            background-color: #222;
+            color: var(--text-color);
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            margin: 10px 0;
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: var(--button-hover-color);
+        }
+
+        .results {
+            margin-top: 20px;
+            font-size: 18px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .results.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #toast {
+            visibility: hidden;
+            min-width: 200px;
+            margin-left: -100px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            padding: 12px;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            bottom: 30px;
+            font-size: 16px;
+            opacity: 0;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+
+        #toast.show {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        ul { 
+            list-style: none; 
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            margin: 10px 0;
+            font-size: 18px;
+            padding: 10px;
+            background-color: var(--secondary-color);
+            border-radius: 5px;
+        }
+
+        .hidden { display: none; }
+
+        .clear-btn {
+            display: block;
+            background-color: #f44336;
+        }
+
+        .clear-btn:hover {
+            background-color: #e41c1c;
+        }
+
+        .form-btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+    </style>
+</head>
+<body>
+    <img src="https://i.imgur.com/fZPVAyu.png" alt="TASCC Logo" id="logo">
+    <h1>FMC Haulage TASCC Portal</h1>
+
+    <div class="form-container">
+        <p>Enter your Trailer Number below to view last 3 loads:</p>
+        <input type="text" id="trailerInput" placeholder="Enter Trailer Number" autofocus>
+        
+        <div class="form-btn-container">
+            <button onclick="searchLoads()">Search</button>
+            <button onclick="clearSearch()" class="clear-btn">Clear</button>
+        </div>
+
+        <div class="results" id="results"></div>
+        <div id="toast"></div>
+    </div>
+
+    <div class="form-container hidden" id="loadFormContainer">
+        <h2>Submit New Load</h2>
+        <input type="text" id="loadTrailer" placeholder="FMC Trailer Number" required>
+        <input type="text" id="commodity" placeholder="Commodity" required>
+        <input type="text" id="collectionPoint" placeholder="Collection Point" required>
+        <input type="text" id="deliveryPoint" placeholder="Delivery Point" required>
+        <input type="text" id="orderNumber" placeholder="Order Number (Optional)">
+        <input type="number" id="weight" placeholder="Weight (Tons)" required>
+        <select id="cleaningMethod" required>
+            <option value="">Select Cleaning Method</option>
+            <option value="Wash">Wash</option>
+            <option value="Dry">Dry</option>
+        </select>
+        <input type="text" id="driverName" placeholder="Driver Name" required>
+        <button onclick="submitLoad()">Submit Load</button>
+    </div>
+
+    <script>
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.innerText = message;
+            toast.className = 'show';
+            setTimeout(() => { toast.className = toast.className.replace('show', ''); }, 3000);
+        }
+
+        function clearSearch() {
+            document.getElementById('trailerInput').value = '';
+            document.getElementById('results').innerHTML = '';
+            document.getElementById('loadFormContainer').classList.add('hidden');
+            document.getElementById('results').classList.remove('show');
+            showToast('Form cleared');
+        }
+
+        async function searchLoads() {
+            const trailer = document.getElementById('trailerInput').value.trim().toUpperCase();
+            const resultsDiv = document.getElementById('results');
+            if (!trailer) {
+                resultsDiv.innerHTML = 'Please enter a trailer number.';
+                showToast('Please enter a trailer number');
+                return;
+            }
+
+            const sheetId = '1UF0ElphUQaBrxpmnP4Urrudf26VqVp4HF0UyjJjCNhE';
+            const apiKey = 'AIzaSyCEUSt7v7iNP3fbYUzCuwN2RVp0cQTOQ5o';
+            const range = "'Form Responses 1'!A:K";
+
+            try {
+                const response = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`);
+                const data = await response.json();
+                let rows = data.values;
+                if (!rows || rows.length <= 1) {
+                    resultsDiv.innerHTML = 'No data found. Please check with the office.';
+                    showToast('No data found');
+                    return;
+                }
+
+                rows = rows.slice(1);
+
+                const matchingRows = rows.filter(row => {
+                    if (!row[1]) return false;
+                    const trailerFromSheet = row[1].toUpperCase().replace(/\s+/g, '').replace(/^FMC/, '');
+                    return trailerFromSheet === trailer;
+                });
+
+                if (matchingRows.length === 0) {
+                    resultsDiv.innerHTML = `No recent load records found for trailer ${trailer}.`;
+                    showToast('No records found');
+                    return;
+                }
+
+                matchingRows.sort((a, b) => new Date(b[0]) - new Date(a[0]));
+                let output = `<strong>Last 3 loads for ${trailer}:</strong><br><ul>`;
+                matchingRows.slice(0, 3).forEach(row => {
+                    const load = row[2] ? row[2] : 'Unknown Load';
+                    const date = row[0] ? row[0] : 'Unknown Date';
+                    output += `<li><details><summary>${load}</summary>${date}</details></li>`;
+                });
+                output += '</ul>';
+
+                resultsDiv.innerHTML = output;
+                resultsDiv.classList.add('show');
+                document.getElementById('loadFormContainer').classList.remove('hidden');
+            } catch (error) {
+                console.error('Error fetching data', error);
+                resultsDiv.innerHTML = 'Error fetching data. Please try again later.';
+                showToast('Error fetching data');
+            }
+        }
+
+        function submitLoad() {
+            const trailer = document.getElementById('loadTrailer').value.trim();
+            const commodity = document.getElementById('commodity').value.trim();
+            const collectionPoint = document.getElementById('collectionPoint').value.trim();
+            const deliveryPoint = document.getElementById('deliveryPoint').value.trim();
+            const orderNumber = document.getElementById('orderNumber').value.trim();
+            const weight = document.getElementById('weight').value.trim();
+            const cleaningMethod = document.getElementById('cleaningMethod').value.trim();
+            const driverName = document.getElementById('driverName').value.trim();
+
+            if (!trailer || !commodity || !collectionPoint || !deliveryPoint || !weight || !cleaningMethod || !driverName) {
+                alert('Please fill out all required fields!');
+                return;
+            }
+
+            alert('Load submitted successfully!');
+            // Optionally you can send the data to your backend or Google Sheets here
+        }
+    </script>
+</body>
+</html>
+
