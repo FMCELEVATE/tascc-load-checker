@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Load Submitted • FMC Haulage TASCC Portal</title>
+  <link rel="icon" href="https://i.imgur.com/fZPVAyu.png">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: #f9f9f9;
+      font-family: 'Arial', sans-serif;
+      color: #222;
+      text-align: center;
+    }
+    .card {
+      background: #fff;
+      padding: 40px 25px;
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      max-width: 420px;
+      width: 90%;
+    }
+    .check {
+      font-size: 64px;
+      color: #28a745;
+      margin-bottom: 15px;
+    }
+    h1 {
+      margin: 0 0 10px;
+      font-size: 24px;
+    }
+    p {
+      margin: 0 0 25px;
+      font-size: 16px;
+      line-height: 1.4;
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      background: #007bff;
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="check">✅</div>
+    <h1>Load Submitted Successfully!</h1>
+    <p>Your load record has been saved. You can now return to the portal or close this page.</p>
+    <button onclick="goHome()">Return to FMC TASCC Portal</button>
+  </div>
+
+  <script>
+    function goHome(){
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+</html>
