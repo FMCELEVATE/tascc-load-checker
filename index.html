@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FMC Haulage TASCC Portal</title>
+    <style>
+        :root {
+            --primary-color: #0094e9;
+            --secondary-color: #f00;
+            --background-color: #121212;
+            --text-color: #fff;
+            --input-background: #fff;
+            --input-text-color: #121212;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --background-color: #121212;
+                --text-color: #fff;
+            }
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            padding: 20px;
+            text-align: center;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        input, select, button {
+            padding: 15px;
+            font-size: 18px;
+            margin: 10px 0;
+            border: 2px solid var(--primary-color);
+            border-radius: 8px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: #fff;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        #clear {
+            background-color: var(--secondary-color);
+        }
+
+        .results {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        .results ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .results li {
+            background-color: #333;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            color: #fff;
+            text-align: left;
+        }
+
+        @media (max-width: 600px) {
+            input, select, button {
+                font-size: 16px;
+                padding: 12px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+
+        #toast {
+            visibility: hidden;
+            min-width: 200px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            padding: 12px;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            font-size: 16px;
+            opacity: 0;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+
+        #toast.show {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .form-section {
+            margin-top: 40px;
+        }
+
+        .form-section input {
+            width: 100%;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="https://imgur.com/fZPVAyu.jpg" alt="TASCC Logo" width="150">
+        <h1>FMC Haulage TASCC Portal</h1>
+
+        <p>Enter your Trailer Number below to view last 3 loads:</p>
+        <input type="text" id="trailerInput" placeholder="Enter Trailer Number" autofocus>
+        <button onclick="searchLoads()">Search</button>
+        <button id="clear" onclick="clearSearch()">Clear</button>
+
+        <div id="lastThreeLoads" class="results"></div>
+
+        <div class="form-section">
+            <h2>Submit New Load</h2>
+            <form id="submitLoadForm">
+                <input type="text" id="trailerSubmit" placeholder="Trailer Number" readonly>
+                <input type="text" id="commodity" placeholder="Commodity" required>
+                <input type="text" id="collectionPoint" placeholder="Collection Point" required>
+                <input type="text" id="deliveryPoint" placeholder="Delivery Point" required>
+                <input type="text" id="orderNumber" placeholder="Order Number (Optional)">
+                <input type="number" id="weight" placeholder="Weight (Tons)" required>
+                <select id="cleaningMethod" required>
+                    <option value="" disabled selected>Select Cleaning Method</option>
+                    <option value="Clean">Clean</option>
+                    <option value="Not Clean">Not Clean</option>
+                </select>
+                <input type="text" id="driverName" placeholder="Driver Name" required>
+                <button type="submit">Submit Load</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="toast"></div>
+
+    <script>
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.innerText = message;
+            toast.className = 'show';
+            setTimeout(() => { toast.className = toast.className.replace('show', ''); }, 3000);
+        }
+
+        function clearSearch() {
+            document.getElementById('trailerInput').value = '';
+            document.getElementById('lastThreeLoads').innerHTML = '';
+            showToast('Form cleared');
+        }
+
+        async function searchLoads() {
+            const trailerNumber = document.getElementById('trailerInput').value.trim().toUpperCase();
+            if (!trailerNumber) {
+                showToast('Please enter a trailer number');
+                return;
+            }
+
+            document.getElementById('trailerSubmit').value = trailerNumber; // Auto-fill the trailer number in Submit Load form
+
+            const resultsDiv = document.getElementById('lastThreeLoads');
+            resultsDiv.innerHTML = 'Loading...';
+
+            // Call your API or function to retrieve the last 3 loads here
+            const lastThree = [
+                { load: 'Hi pro Soya', date: '27/04/2025 08:45:30' },
+                { load: 'Palm Kernal', date: '27/04/2025 09:09:35' },
+                { load: 'Apples', date: '27/04/2025 09:14:32' }
+            ];
+
+            if (lastThree.length === 0) {
+                resultsDiv.innerHTML = 'No data found.';
+            } else {
+                resultsDiv.innerHTML = `<strong>Last 3 loads for ${trailerNumber}:</strong><ul>`;
+                lastThree.forEach(load => {
+                    resultsDiv.innerHTML += `<li><b>${load.load}</b> – ${load.date}</li>`;
+                });
+                resultsDiv.innerHTML += '</ul>';
+            }
+        }
+
+        document.getElementById('submitLoadForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            showToast('Load submitted successfully');
+        });
+    </script>
+</body>
+</html>
