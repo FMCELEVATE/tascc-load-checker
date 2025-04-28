@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FMC Haulage TASCC Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* General Body Styling */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FFFFFF;
+            color: #111827;
+            padding: 20px;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Header Styling */
+        header {
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Input Field Styling */
+        input[type="text"] {
+            width: 80%;
+            padding: 15px;
+            border-radius: 20px;
+            border: 2px solid #E5E7EB;
+            margin-bottom: 20px;
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        /* Button Styling */
+        .button {
+            width: 48%;
+            padding: 15px;
+            font-size: 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .button.search {
+            background-color: #1D4ED8;
+            color: white;
+            margin-right: 4%;
+        }
+
+        .button.clear {
+            background-color: #BFDBFE;
+            color: #1D4ED8;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            width: 80%;
+            margin-bottom: 20px;
+        }
+
+        /* Load Cards Styling */
+        .load-cards {
+            width: 80%;
+            margin-top: 20px;
+        }
+
+        .load-card {
+            background-color: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .load-card h3 {
+            font-size: 1.2rem;
+            color: #1D4ED8;
+            font-weight: 600;
+            margin: 0 0 5px;
+        }
+
+        .load-card p {
+            font-size: 0.9rem;
+            color: #6B7280;
+            margin: 2px 0;
+        }
+
+        /* Submit New Load Button */
+        .submit-load {
+            width: 80%;
+            padding: 15px;
+            background-color: #1D4ED8;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-align: center;
+            border-radius: 50px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 480px) {
+            input[type="text"] {
+                width: 90%;
+            }
+
+            .button-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .button {
+                width: 100%;
+                margin: 10px 0;
+            }
+
+            .submit-load {
+                width: 100%;
+            }
+
+            .load-card {
+                font-size: 0.9rem;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>FMC Haulage TASCC Portal</header>
+    
+    <input type="text" id="trailerNumber" placeholder="Enter Trailer Number" autofocus>
+
+    <div class="button-container">
+        <button class="button search" onclick="searchLoad()">Search</button>
+        <button class="button clear" onclick="clearSearch()">Clear</button>
+    </div>
+
+    <div class="load-cards" id="loadCards"></div>
+
+    <div>
+        <div>Submit New Load</div>
+        <input type="text" id="newTrailerNumber" placeholder="Trailer Number" readonly>
+        <select id="commoditySelect">
+            <option value="">Select Commodity</option>
+            <!-- Populate options dynamically -->
+        </select>
+        <select id="collectionPointSelect">
+            <option value="">Select Collection Point</option>
+            <!-- Populate options dynamically -->
+        </select>
+        <select id="deliveryPointSelect">
+            <option value="">Select Delivery Point</option>
+            <!-- Populate options dynamically -->
+        </select>
+        <input type="number" id="weight" placeholder="Weight (Tons)">
+        <select id="cleaningMethodSelect">
+            <option value="">Select Cleaning Method</option>
+            <!-- Populate options dynamically -->
+        </select>
+        <select id="driverSelect">
+            <option value="">Select Driver</option>
+            <!-- Populate options dynamically -->
+        </select>
+        <input type="text" id="orderNumber" placeholder="Order Number (Optional)">
+        <button class="submit-load" onclick="submitLoad()">Submit Load</button>
+    </div>
+
+    <script>
+        function searchLoad() {
+            let trailerNumber = document.getElementById("trailerNumber").value;
+            // Fetch and display last 3 loads from the sheet based on trailer number
+            document.getElementById("loadCards").innerHTML = `
+                <div class="load-card">
+                    <h3>Hi pro Soya</h3>
+                    <p>Timestamp: 27/04/2025 08:45:30</p>
+                    <p>Collection Point: CEFETRA RING</p>
+                    <p>Delivery Point: DG MOGEELY</p>
+                </div>
+                <div class="load-card">
+                    <h3>Palm Kernal</h3>
+                    <p>Timestamp: 27/04/2025 09:09:35</p>
+                    <p>Collection Point: DG BALLINHASSIG</p>
+                    <p>Delivery Point: FARRELLS CTR</p>
+                </div>
+                <div class="load-card">
+                    <h3>Apples</h3>
+                    <p>Timestamp: 27/04/2025 09:14:32</p>
+                    <p>Collection Point: HALLS FOYNES</p>
+                    <p>Delivery Point: DG LOMBARDSTOWN</p>
+                </div>
+            `;
+        }
+
+        function clearSearch() {
+            document.getElementById("trailerNumber").value = "";
+            document.getElementById("loadCards").innerHTML = "";
+        }
+
+        function submitLoad() {
+            let trailerNumber = document.getElementById("newTrailerNumber").value;
+            let commodity = document.getElementById("commoditySelect").value;
+            let collectionPoint = document.getElementById("collectionPointSelect").value;
+            let deliveryPoint = document.getElementById("deliveryPointSelect").value;
+            let weight = document.getElementById("weight").value;
+            let cleaningMethod = document.getElementById("cleaningMethodSelect").value;
+            let driver = document.getElementById("driverSelect").value;
+            let orderNumber = document.getElementById("orderNumber").value;
+            
+            // Send this data to your Google Sheet or API to store the load data
+            console.log({
+                trailerNumber,
+                commodity,
+                collectionPoint,
+                deliveryPoint,
+                weight,
+                cleaningMethod,
+                driver,
+                orderNumber
+            });
+
+            // Reset after submission
+            clearSearch();
+        }
+    </script>
+</body>
+</html>
