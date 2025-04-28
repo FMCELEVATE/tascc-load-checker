@@ -4,232 +4,249 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FMC Haulage TASCC Portal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* General Body Styling */
+        :root {
+            --primary-color: #0094e9;
+            --secondary-color: #1e1e1e;
+            --text-color: #ffffff;
+            --background-color: #121212;
+            --input-background: #282828;
+            --button-color: #0077cc;
+            --button-hover: #005fa3;
+            --font-size: 16px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --primary-color: #0094e9;
+                --text-color: #ffffff;
+                --background-color: #121212;
+                --input-background: #282828;
+            }
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #FFFFFF;
-            color: #111827;
-            padding: 20px;
+            font-family: 'Roboto', sans-serif;
             margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
             display: flex;
             flex-direction: column;
             align-items: center;
-        }
-
-        /* Header Styling */
-        header {
-            font-size: 1.5rem;
-            font-weight: 600;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        /* Input Field Styling */
-        input[type="text"] {
-            width: 80%;
-            padding: 15px;
-            border-radius: 20px;
-            border: 2px solid #E5E7EB;
-            margin-bottom: 20px;
-            font-size: 1rem;
+            justify-content: center;
+            height: 100vh;
             text-align: center;
         }
 
-        /* Button Styling */
-        .button {
-            width: 48%;
+        input, select, button {
+            width: 100%;
+            max-width: 350px;
             padding: 15px;
-            font-size: 1rem;
-            border-radius: 20px;
+            margin: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--primary-color);
+            background-color: var(--input-background);
+            color: var(--text-color);
+            font-size: var(--font-size);
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        button {
+            background-color: var(--button-color);
+            color: var(--text-color);
             cursor: pointer;
-            text-align: center;
-            font-weight: 600;
+            border: none;
+            transition: background-color 0.3s ease;
         }
 
-        .button.search {
-            background-color: #1D4ED8;
-            color: white;
-            margin-right: 4%;
+        button:hover {
+            background-color: var(--button-hover);
         }
 
-        .button.clear {
-            background-color: #BFDBFE;
-            color: #1D4ED8;
-        }
-
-        .button-container {
-            display: flex;
-            justify-content: space-between;
-            width: 80%;
-            margin-bottom: 20px;
-        }
-
-        /* Load Cards Styling */
-        .load-cards {
-            width: 80%;
+        h1 {
+            font-size: 24px;
             margin-top: 20px;
+            margin-bottom: 10px;
         }
 
-        .load-card {
-            background-color: white;
-            border-radius: 20px;
-            padding: 20px;
+        .load-entry {
+            background-color: #333333;
+            padding: 10px;
             margin-bottom: 15px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
         }
 
-        .load-card h3 {
-            font-size: 1.2rem;
-            color: #1D4ED8;
-            font-weight: 600;
-            margin: 0 0 5px;
+        .load-entry p {
+            margin: 5px 0;
+            font-size: 14px;
         }
 
-        .load-card p {
-            font-size: 0.9rem;
-            color: #6B7280;
-            margin: 2px 0;
-        }
-
-        /* Submit New Load Button */
-        .submit-load {
-            width: 80%;
-            padding: 15px;
-            background-color: #1D4ED8;
-            color: white;
-            font-size: 1.2rem;
-            font-weight: 600;
-            text-align: center;
-            border-radius: 50px;
+        .footer {
+            font-size: 12px;
             margin-top: 20px;
-            cursor: pointer;
+            color: #888;
         }
 
-        /* Mobile Responsiveness */
-        @media (max-width: 480px) {
-            input[type="text"] {
-                width: 90%;
+        .loading {
+            background-color: #555555;
+            color: #aaa;
+            font-size: 16px;
+            padding: 10px;
+            margin-top: 20px;
+            border-radius: 8px;
+        }
+
+        .results {
+            max-width: 350px;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .submit-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        .submit-container select {
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 20px;
             }
 
-            .button-container {
-                flex-direction: column;
-                align-items: center;
+            input, select, button {
+                max-width: 100%;
             }
 
-            .button {
-                width: 100%;
-                margin: 10px 0;
-            }
-
-            .submit-load {
-                width: 100%;
-            }
-
-            .load-card {
-                font-size: 0.9rem;
-                padding: 15px;
+            .footer {
+                font-size: 10px;
             }
         }
     </style>
 </head>
 <body>
-    <header>FMC Haulage TASCC Portal</header>
-    
+    <h1>FMC Haulage TASCC Portal</h1>
+    <p>Enter your Trailer Number below to view last 3 loads:</p>
     <input type="text" id="trailerNumber" placeholder="Enter Trailer Number" autofocus>
+    <button onclick="searchLoads()">Search</button>
+    <button onclick="clearSearch()">Clear</button>
 
-    <div class="button-container">
-        <button class="button search" onclick="searchLoad()">Search</button>
-        <button class="button clear" onclick="clearSearch()">Clear</button>
-    </div>
+    <div id="loading" class="loading hidden">Loading...</div>
+    
+    <div id="results" class="results"></div>
 
-    <div class="load-cards" id="loadCards"></div>
-
-    <div>
-        <div>Submit New Load</div>
-        <input type="text" id="newTrailerNumber" placeholder="Trailer Number" readonly>
-        <select id="commoditySelect">
+    <div class="submit-container">
+        <h2>Submit New Load</h2>
+        <input type="text" id="submitTrailer" placeholder="Trailer Number" readonly>
+        <select id="commodity">
             <option value="">Select Commodity</option>
-            <!-- Populate options dynamically -->
+            <option value="Barley">Barley</option>
+            <option value="Maize">Maize</option>
+            <option value="Hi pro Soya">Hi pro Soya</option>
+            <option value="Palm Kernal">Palm Kernal</option>
+            <!-- Add more options here -->
         </select>
-        <select id="collectionPointSelect">
+        <select id="collectionPoint">
             <option value="">Select Collection Point</option>
-            <!-- Populate options dynamically -->
+            <option value="CEFETRA RING">CEFETRA RING</option>
+            <option value="DG BALLINHASSIG">DG BALLINHASSIG</option>
+            <option value="HALLS FOYNES">HALLS FOYNES</option>
+            <!-- Add more options here -->
         </select>
-        <select id="deliveryPointSelect">
+        <select id="deliveryPoint">
             <option value="">Select Delivery Point</option>
-            <!-- Populate options dynamically -->
+            <option value="DG MOGEELY">DG MOGEELY</option>
+            <option value="FARRELLS CTR">FARRELLS CTR</option>
+            <option value="DG LOMBARDSTOWN">DG LOMBARDSTOWN</option>
+            <!-- Add more options here -->
         </select>
         <input type="number" id="weight" placeholder="Weight (Tons)">
-        <select id="cleaningMethodSelect">
+        <select id="cleaningMethod">
             <option value="">Select Cleaning Method</option>
-            <!-- Populate options dynamically -->
+            <option value="Washed Internal">Washed Internal</option>
+            <option value="Swept">Swept</option>
+            <option value="Steam Cleaned">Steam Cleaned</option>
+            <!-- Add more options here -->
         </select>
-        <select id="driverSelect">
+        <select id="driver">
             <option value="">Select Driver</option>
-            <!-- Populate options dynamically -->
+            <option value="Bob O'Callaghan">Bob O'Callaghan</option>
+            <option value="Colm Twomey">Colm Twomey</option>
+            <option value="Ciaran Cronin">Ciaran Cronin</option>
+            <!-- Add more options here -->
         </select>
-        <input type="text" id="orderNumber" placeholder="Order Number (Optional)">
-        <button class="submit-load" onclick="submitLoad()">Submit Load</button>
+        <button onclick="submitLoad()">Submit Load</button>
     </div>
 
+    <div class="footer">Powered by Elevate Solutions | TASCC Portal</div>
+
     <script>
-        function searchLoad() {
-            let trailerNumber = document.getElementById("trailerNumber").value;
-            // Fetch and display last 3 loads from the sheet based on trailer number
-            document.getElementById("loadCards").innerHTML = `
-                <div class="load-card">
-                    <h3>Hi pro Soya</h3>
-                    <p>Timestamp: 27/04/2025 08:45:30</p>
-                    <p>Collection Point: CEFETRA RING</p>
-                    <p>Delivery Point: DG MOGEELY</p>
-                </div>
-                <div class="load-card">
-                    <h3>Palm Kernal</h3>
-                    <p>Timestamp: 27/04/2025 09:09:35</p>
-                    <p>Collection Point: DG BALLINHASSIG</p>
-                    <p>Delivery Point: FARRELLS CTR</p>
-                </div>
-                <div class="load-card">
-                    <h3>Apples</h3>
-                    <p>Timestamp: 27/04/2025 09:14:32</p>
-                    <p>Collection Point: HALLS FOYNES</p>
-                    <p>Delivery Point: DG LOMBARDSTOWN</p>
-                </div>
-            `;
+        function searchLoads() {
+            let trailerNumber = document.getElementById('trailerNumber').value;
+            if (trailerNumber) {
+                document.getElementById('loading').classList.remove('hidden');
+                setTimeout(() => {
+                    // Simulating load fetching process
+                    document.getElementById('loading').classList.add('hidden');
+                    document.getElementById('results').innerHTML = `
+                        <div class="load-entry">
+                            <p><strong>Hi pro Soya</strong> - 27/04/2025 08:45:30</p>
+                            <p>Collection Point: CEFETRA RING</p>
+                            <p>Delivery Point: DG MOGEELY</p>
+                        </div>
+                        <div class="load-entry">
+                            <p><strong>Palm Kernal</strong> - 27/04/2025 09:09:35</p>
+                            <p>Collection Point: DG BALLINHASSIG</p>
+                            <p>Delivery Point: FARRELLS CTR</p>
+                        </div>
+                        <div class="load-entry">
+                            <p><strong>Apples</strong> - 27/04/2025 09:14:32</p>
+                            <p>Collection Point: HALLS FOYNES</p>
+                            <p>Delivery Point: DG LOMBARDSTOWN</p>
+                        </div>
+                    `;
+                }, 1000); // Mock delay to simulate loading time
+            } else {
+                alert('Please enter a trailer number!');
+            }
         }
 
         function clearSearch() {
-            document.getElementById("trailerNumber").value = "";
-            document.getElementById("loadCards").innerHTML = "";
+            document.getElementById('trailerNumber').value = '';
+            document.getElementById('results').innerHTML = '';
         }
 
         function submitLoad() {
-            let trailerNumber = document.getElementById("newTrailerNumber").value;
-            let commodity = document.getElementById("commoditySelect").value;
-            let collectionPoint = document.getElementById("collectionPointSelect").value;
-            let deliveryPoint = document.getElementById("deliveryPointSelect").value;
-            let weight = document.getElementById("weight").value;
-            let cleaningMethod = document.getElementById("cleaningMethodSelect").value;
-            let driver = document.getElementById("driverSelect").value;
-            let orderNumber = document.getElementById("orderNumber").value;
-            
-            // Send this data to your Google Sheet or API to store the load data
-            console.log({
-                trailerNumber,
-                commodity,
-                collectionPoint,
-                deliveryPoint,
-                weight,
-                cleaningMethod,
-                driver,
-                orderNumber
-            });
+            let trailerNumber = document.getElementById('submitTrailer').value;
+            let commodity = document.getElementById('commodity').value;
+            let collectionPoint = document.getElementById('collectionPoint').value;
+            let deliveryPoint = document.getElementById('deliveryPoint').value;
+            let weight = document.getElementById('weight').value;
+            let cleaningMethod = document.getElementById('cleaningMethod').value;
+            let driver = document.getElementById('driver').value;
 
-            // Reset after submission
-            clearSearch();
+            if (!trailerNumber || !commodity || !collectionPoint || !deliveryPoint || !weight || !cleaningMethod || !driver) {
+                alert('Please fill in all fields!');
+                return;
+            }
+
+            // Logic to save the submitted load to the Google Sheets or Database
+            alert('Load submitted successfully!');
         }
     </script>
 </body>
 </html>
+
