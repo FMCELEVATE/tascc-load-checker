@@ -1,0 +1,74 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TASCC Trailer Record Portal</title>
+    <link rel="icon" type="image/png" href="https://www.agindustries.org.uk/static/c29eebc7-ce13-444e-a9b3246c35a38288/71be1721-1a62-4bed-984a81b53b699a96/toc_d333720560e279be8ea4c96c6f19c1f6/TASCC-logo.png">
+    <style>
+        body {
+            background-color: #f2f2f2;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .iframe-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: white;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo-container img {
+            max-width: 150px;
+            margin: 10px;
+        }
+        iframe {
+            width: 100%;
+            height: 1800px;
+            border: none;
+        }
+        @media (max-width: 768px) {
+            iframe {
+                height: 2200px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Preloader -->
+<div id="preloader" style="background:#f2f2f2; height:100vh; width:100%; position:fixed; top:0; left:0; z-index:9999; display:flex; align-items:center; justify-content:center;">
+    <div style="border: 8px solid #f3f3f3; border-top: 8px solid #00529b; border-radius: 50%; width: 60px; height: 60px; animation: spin 1.2s linear infinite;"></div>
+</div>
+
+<script>
+window.addEventListener('load', function() {
+    var preloader = document.getElementById('preloader');
+    preloader.style.display = 'none';
+});
+</script>
+
+<style>
+@keyframes spin {
+  0% { transform: rotate(0deg);}
+  100% { transform: rotate(360deg);}
+}
+</style>
+
+<div class="iframe-container">
+    <div class="logo-container">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeMsLvrE53DtSm3y-Jv6-CFmII3x9NSXmEmA&s" alt="FMC Haulage Logo">
+        <img src="https://www.agindustries.org.uk/static/c29eebc7-ce13-444e-a9b3246c35a38288/71be1721-1a62-4bed-984a81b53b699a96/toc_d333720560e279be8ea4c96c6f19c1f6/TASCC-logo.png" alt="TASCC Logo">
+    </div>
+    <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScLhrT3RTY86jQejgKSXeu27Fxq2Q4z5avOeSvUQevWfiQhxw/viewform?embedded=true"></iframe>
+</div>
+
+</body>
+</html>
