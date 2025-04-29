@@ -1,0 +1,41 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TASCC Portal - FMC Haulage</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <div id="preloader"></div>
+  <header>
+    <img src="fmc-logo.png" alt="FMC Haulage Logo" class="logo"/>
+    <img src="tascc-logo.png" alt="TASCC Logo" class="logo right"/>
+  </header>
+
+  <main>
+    <section class="search-section">
+      <h2>Search Trailer History</h2>
+      <input type="text" id="trailerSearch" placeholder="Enter trailer number…" />
+      <button onclick="searchTrailer()">Search</button>
+      <div id="trailerResults"></div>
+    </section>
+
+    <section class="form-section">
+      <iframe src="YOUR_GOOGLE_FORM_EMBED_URL_HERE" width="100%" height="1200" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+    </section>
+
+    <section id="successMessage" class="hidden">
+      <h3>✅ Thank you — your TASCC record has been submitted successfully.</h3>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 FMC Haulage / Elevate AI</p>
+  </footer>
+</body>
+</html>
