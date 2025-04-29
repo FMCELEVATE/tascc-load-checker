@@ -1,51 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TASCC Portal – FMC Haulage</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="manifest" href="manifest.json" />
-  <link rel="icon" type="image/x-icon" href="favicon.ico" />
-  <script defer src="script.js"></script>
-</head>
-<body>
-  <div id="preloader"></div>
+<section class="form-section">
+    <h3>Enter Trailer Details</h3>
+    <form id="trailerForm">
+        <label for="trailerNumber">Trailer Number:</label>
+        <input type="text" id="trailerNumber" name="trailerNumber" required>
 
-  <header>
-    <img src="logos/fmc-logo.png" alt="FMC Haulage Logo" />
-    <img src="logos/tascc-logo.png" alt="TASCC Logo" class="logo right" />
-  </header>
+        <label for="commodity">Commodity:</label>
+        <select id="commodity" name="commodity" required>
+            <option value="">Select</option>
+            <option value="Option 1">Option 1</option>
+            <option value="Option 2">Option 2</option>
+        </select>
 
-  <main>
-    <!-- Search Interface -->
-    <section class="search-section">
-      <h2>Search Trailer History</h2>
-      <input type="text" id="trailerSearch" placeholder="Enter trailer number…" />
-      <button onclick="searchTrailer()">Search</button>
-      <div id="trailerResults"></div>
-    </section>
+        <label for="collectedFrom">Collected From:</label>
+        <select id="collectedFrom" name="collectedFrom" required>
+            <option value="">Select</option>
+            <option value="Location 1">Location 1</option>
+            <option value="Location 2">Location 2</option>
+        </select>
 
-    <!-- Form Embed -->
-    <section class="form-section">
-      <iframe 
-        src="https://docs.google.com/forms/d/e/1FAIpQLSdvcPmnLVzsR9OTgmege92J7t0Wn76mmNt0cycTlBD1NTF-XfXkKYg/viewform?embedded=true" 
-        width="100%" 
-        height="1400" 
-        frameborder="0" 
-        marginheight="0" 
-        marginwidth="0"
-      >Loading…</iframe>
-    </section>
+        <label for="deliveredTo">Delivered To:</label>
+        <select id="deliveredTo" name="deliveredTo" required>
+            <option value="">Select</option>
+            <option value="Destination 1">Destination 1</option>
+            <option value="Destination 2">Destination 2</option>
+        </select>
 
-    <!-- Success Message (only appears after form submission if enabled) -->
-    <section id="successMessage" class="hidden">
-      <h3>✅ Thank you — your TASCC record has been submitted successfully.</h3>
-    </section>
-  </main>
+        <label for="orderNumber">Order Number:</label>
+        <input type="text" id="orderNumber" name="orderNumber" required>
 
-  <footer>
-    <p>© 2025 FMC Haulage / Elevate AI</p>
-  </footer>
-</body>
-</html>
+        <label for="weight">Weight:</label>
+        <input type="number" id="weight" name="weight" required>
+
+        <label for="driverName">Driver Name:</label>
+        <select id="driverName" name="driverName" required>
+            <option value="">Select</option>
+            <option value="Driver 1">Driver 1</option>
+            <option value="Driver 2">Driver 2</option>
+        </select>
+
+        <button type="submit">Submit</button>
+    </form>
+</section>
