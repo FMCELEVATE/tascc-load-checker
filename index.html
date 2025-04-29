@@ -1,1 +1,51 @@
-<!-- Final HTML for TASCC Portal -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TASCC Portal – FMC Haulage</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <div id="preloader"></div>
+
+  <header>
+    <img src="logos/fmc-logo.png" alt="FMC Haulage Logo" />
+    <img src="logos/tascc-logo.png" alt="TASCC Logo" class="logo right" />
+  </header>
+
+  <main>
+    <!-- Search Interface -->
+    <section class="search-section">
+      <h2>Search Trailer History</h2>
+      <input type="text" id="trailerSearch" placeholder="Enter trailer number…" />
+      <button onclick="searchTrailer()">Search</button>
+      <div id="trailerResults"></div>
+    </section>
+
+    <!-- Form Embed -->
+    <section class="form-section">
+      <iframe 
+        src="https://docs.google.com/forms/d/e/1FAIpQLSdvcPmnLVzsR9OTgmege92J7t0Wn76mmNt0cycTlBD1NTF-XfXkKYg/viewform?embedded=true" 
+        width="100%" 
+        height="1400" 
+        frameborder="0" 
+        marginheight="0" 
+        marginwidth="0"
+      >Loading…</iframe>
+    </section>
+
+    <!-- Success Message (only appears after form submission if enabled) -->
+    <section id="successMessage" class="hidden">
+      <h3>✅ Thank you — your TASCC record has been submitted successfully.</h3>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 FMC Haulage / Elevate AI</p>
+  </footer>
+</body>
+</html>
